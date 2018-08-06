@@ -33,6 +33,7 @@ export class LoanDetailComponent implements OnInit {
   canTransfer: boolean;
   canCancel: boolean;
   canPay: boolean;
+  canLend: boolean;
   totalDebt: number;
   pendingAmount: number;
 
@@ -94,6 +95,7 @@ export class LoanDetailComponent implements OnInit {
     this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
     this.canCancel = this.loan.borrower === this.userAccount && this.loan.status === Status.Request;
     this.canPay = this.loan.owner !== this.userAccount && (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt);
+    this.canLend = this.loan.borrower !== this.userAccount && this.isRequest;
   }
 
   openDetail(view: string) {

@@ -7,8 +7,9 @@ import { Injectable } from '@angular/core';
 import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
 import { Web3Service } from './services/web3.service';
+import { Observable } from 'rxjs';
 
-enum Type { lend, approve, withdraw, transfer, claim, pay, cancel }
+enum Type { lend, approve, withdraw, transfer, claim, pay, cancel, request }
 
 export class Tx {
   tx: string;
@@ -42,6 +43,8 @@ export class TxService {
   private localStorage: any;
   private interval: any;
 
+  private subscribers: ((tx: Tx, receipt: any) => void)[] = [];
+
   constructor(
     private web3service: Web3Service
   ) {
@@ -65,10 +68,25 @@ export class TxService {
             console.log('Found receipt tx', tx, receipt);
             tx.confirmed = true;
             this.saveTxs();
+            this.subscribers.forEach(cb => cb(tx, receipt));
           }
         });
       }
     });
+  }
+
+  public subscribe(cb: (tx: Tx, receipt: any) => void): (tx: Tx, receipt: any) => void {
+    if (this.subscribers.find(c => c === cb) === undefined) {
+      this.subscribers.push(cb);
+    }
+
+    return cb;
+  }
+
+  public unsubscribe(cb) {
+      this.subscribers = this.subscribers.filter((el) => {
+          return el !== cb;
+      });
   }
 
   private saveTxs() {
@@ -188,5 +206,15 @@ export class TxService {
       .filter(tx => !tx.confirmed && tx.type === Type.cancel)
       .sort((tx1, tx2) => tx2.timestamp - tx2.timestamp)
       .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+  }
+
+  public registerRequestTx(tx: string) {
+    this.tx_memory.push(new Tx(tx, undefined, false, Type.request, {}));
+    this.saveTxs();
+  }
+
+  public getPendingRequest(): Tx {
+    return this.tx_memory
+      .find(tx => !tx.confirmed && tx.type === Type.request);
   }
 }

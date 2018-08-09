@@ -30,12 +30,6 @@ export class OpenLoansComponent implements OnInit{
 
   constructor(
     private contractsService: ContractsService,
-<<<<<<< HEAD
-    private txService: TxService,
-    private scriptService: ScriptService,
-    private brandingService: BrandingService,
-=======
->>>>>>> 150d9727de1e0bb38a145cc3b417545dedcbcdd0
     private spinner: NgxSpinnerService,
     private availableLoansService: AvailableLoansService,
     public dialog: MatDialog,

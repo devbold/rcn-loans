@@ -4,7 +4,6 @@ import * as Raven from 'raven-js';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -15,6 +14,7 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
 import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
+import { ActiveLoansModule } from './views/active-loans/active-loans.module';
 
 // App Services
 import { ContractsService } from './services/contracts.service';
@@ -43,7 +43,6 @@ import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 
 import { AddressComponent } from './views/address/address.component';
 
-import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
@@ -80,7 +79,6 @@ export class RavenErrorHandler implements ErrorHandler {
     DialogLoanTransferComponent,
     ProfileComponent,
     AddressComponent,
-    ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
     DialogInsufficientFoundsComponent,
@@ -98,6 +96,7 @@ export class RavenErrorHandler implements ErrorHandler {
     NgxSpinnerModule,
     NotFoundModule,
     LoanDetailModule,
+    ActiveLoansModule,
   ],
   exports: [],
   entryComponents: [

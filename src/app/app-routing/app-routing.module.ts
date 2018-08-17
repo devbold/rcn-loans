@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 // App Components
 import { OpenLoansComponent } from '../views/open-loans/open-loans.component';
-import { ActiveLoansComponent } from '../active-loans/active-loans.component';
+import { ActiveLoansComponent } from '../views/active-loans/active-loans.component';
 import { LoanDetailComponent } from '../views/loan-detail/loan-detail.component';
 import { AddressComponent } from '../views/address/address.component';
 import { ProfileComponent } from '../views/profile/profile.component';

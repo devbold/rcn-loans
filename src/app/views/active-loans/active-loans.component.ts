@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
-import { Loan } from './../models/loan.model';
+import { Loan } from './../../models/loan.model';
 // App Services
-import { Utils } from './../utils/utils';
-import { ContractsService } from './../services/contracts.service';
-import { AvailableLoansService } from '../services/available-loans.service';
+import { Utils } from './../../utils/utils';
+import { ContractsService } from './../../services/contracts.service';
+import { AvailableLoansService } from '../../services/available-loans.service';
 
 @Component({
   selector: 'app-active-loans',

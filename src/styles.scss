@@ -79,6 +79,13 @@ body{
       background-color: $fifth;
     }
   }
+  &.button-transfer{
+    color: $secondary;
+    background-color: $orange;
+    &:hover, &:active, &:visited, &:focus{
+      background-color: $orange-hover;
+    }
+  }
 }
 
 // Colors

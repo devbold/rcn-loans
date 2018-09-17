@@ -4,10 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "rcn-angular-dapp": {
-      "root": "src",
-      "sourceRoot": "rcn-loans/src",
+      "root": "",
+      "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "rcn-loans/app/src",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

@@ -276,9 +276,7 @@ mat-form-field{
     width: auto;
     color: $secondary;
   }
-  .mat-form-field-label{
-    color: $secondary;
-  }
+  .mat-form-field-label{ color: $secondary; }
   .mat-hint,
   .mat-select-arrow {
     color: rgba(255,255,255,.5);
@@ -286,15 +284,9 @@ mat-form-field{
 }
 
 .mat-form-field-appearance-legacy{
-  .mat-hint{
-    color: $primary;
-  }
-  .mat-form-field-label{
-    color: $secondary;
-  }
-  .mat-form-field-underline {
-    background-color: rgba(255,255,255,.5);
-  }
+  .mat-hint{ color: $primary; }
+  .mat-form-field-label{ color: $secondary; }
+  .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
 }
 
 @media (min-width: 768px){

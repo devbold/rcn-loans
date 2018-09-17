@@ -30,7 +30,7 @@ export class LoanDetailComponent implements OnInit {
   interestMiddleText: string;
   isRequest: boolean;
   isOngoing: boolean;
-  canTransfer: boolean = true;
+  canTransfer: boolean;
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;

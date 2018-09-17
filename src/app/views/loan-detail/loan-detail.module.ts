@@ -26,6 +26,7 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { DialogPayComponent } from './../../dialogs/dialog-pay/dialog-pay.component';
 
 
 @NgModule({
@@ -53,10 +54,12 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
     TransactionHistoryComponent,
     GobackButtonComponent,
     TransferButtonComponent,
-    DialogLoanTransferComponent
+    DialogLoanTransferComponent,
+    DialogPayComponent
   ],
   entryComponents: [
-    DialogLoanTransferComponent
+    DialogLoanTransferComponent,
+    DialogPayComponent
   ],
 })
 export class LoanDetailModule { }

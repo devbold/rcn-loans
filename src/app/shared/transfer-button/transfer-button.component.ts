@@ -3,7 +3,6 @@ import { Component, OnInit, Input } from '@angular/core';
 // App Component
 import { MatDialog } from '@angular/material';
 import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { TxService, Tx } from '../../tx.service';
 import { environment } from '../../../environments/environment';

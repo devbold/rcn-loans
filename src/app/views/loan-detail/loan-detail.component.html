@@ -97,6 +97,7 @@
             <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
             <app-risk-indicator class='risk-indicator' [loan]=loan></app-risk-indicator>
             <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
+            <app-pay-button [loan]="loan" *ngIf="canPay"></app-pay-button>
           </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">

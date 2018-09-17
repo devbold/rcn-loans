@@ -80,7 +80,7 @@
               <thead>
                 <tr>
                   <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
-                      Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+                    Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
                   </th>
                 </tr>
               </thead>
@@ -93,7 +93,7 @@
             <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
             <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="isRequest"></app-risk-indicator>
             <app-cancel-button [loan]="loan" *ngIf="canCancel"></app-cancel-button>
-            <app-transfer-button [loan]="loan"></app-transfer-button>
+            <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
             <app-pay-button [loan]="loan" *ngIf="canPay"></app-pay-button>
             <!-- <app-forgive-button></app-forgive-button> -->
           </div>

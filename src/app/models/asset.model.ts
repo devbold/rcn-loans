@@ -2,6 +2,7 @@ export enum AssetType {
   ERC20,
   ERC721
 }
+
  export class AssetClass {
   constructor(
     public name: string,
@@ -9,6 +10,7 @@ export enum AssetType {
     public type: AssetType
   ) {}
 }
+
  export class AssetItem {
   constructor(
     public asset: AssetClass,
@@ -20,6 +22,7 @@ export enum AssetType {
     return this.id.toFixed(0) + this.asset.contract;
   }
 }
+
  export class AssetMetadata {
   constructor(
     public name: string,

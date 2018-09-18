@@ -13,7 +13,8 @@ export class CosignerOffer extends Cosigner {
     constructor (
         public contract: string,
         public cosignerDetail: CosignerDetail,
-        public lendData: string
+        public lendData: string,
+        public cancel: () => Promise<string>
     ) {
         super(contract, cosignerDetail);
     }
@@ -23,7 +24,7 @@ export class CosignerLiability extends Cosigner {
     constructor (
         public contract: string,
         public cosignerDetail: CosignerDetail,
-        public canClaim: Boolean,
+        public canClaim: (address: string) => boolean,
         public claim: () => Promise<string>
     ) {
         super(contract, cosignerDetail);

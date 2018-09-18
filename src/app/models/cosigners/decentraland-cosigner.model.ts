@@ -9,7 +9,8 @@ export class DecentralandCosigner extends CosignerDetail {
         public landPrice: number,
         public financePart: string,
         public parcel: Parcel,
-        public status: number
+        public status: number,
+        public owner: string
     ) {
         super();
     }
@@ -79,7 +80,7 @@ export class Tag {
     ) {}
 }
 
-function decodeTokenId(value: string): [number, number] {
+export function decodeTokenId(value: string): [number, number] {
     value = value.slice(2);
     const x = value.slice(0, 32);
     const y = value.slice(32);

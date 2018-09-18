@@ -20,7 +20,7 @@ export class PayButtonComponent implements OnInit {
     private txService: TxService
   ) { }
    loadPendingTx() {
-    // this.pending = this.txService.getLastPendingPay(this.loan);
+    this.pending = this.txService.getLastPendingPay(this.loan);
   }
 
   handlePay() {
@@ -31,13 +31,12 @@ export class PayButtonComponent implements OnInit {
         loan: this.loan
       }});
        dialogRef.afterClosed().subscribe(amount => {
-        // this.contractService.payLoan(this.loan, amount).then((tx) => {
-        //   this.txService.registerPayTx(tx, this.loan, amount);
-        //   this.loadPendingTx();
-        // });
+        this.contractService.payLoan(this.loan, amount).then((tx) => {
+          this.txService.registerPayTx(tx, this.loan, amount);
+          this.loadPendingTx();
+        });
       });
     }
   }
   ngOnInit() {}
-
 }

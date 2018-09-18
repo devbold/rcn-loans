@@ -7,9 +7,11 @@ import { Injectable } from '@angular/core';
 import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
 import { Web3Service } from './services/web3.service';
+import { Observable } from 'rxjs';
 import { EventsService, Category } from './services/events.service';
 
-enum Type { lend = 'lend', approve = 'approve', withdraw = 'withdraw', transfer = 'transfer', claim = 'claim' }
+// enum Type { lend = 'lend', approve = 'approve', withdraw = 'withdraw', transfer = 'transfer', claim = 'claim' }
+enum Type { lend, approve, withdraw, transfer, claim, pay, cancel, request }
 
 export class Tx {
   tx: string;
@@ -43,6 +45,8 @@ export class TxService {
   private localStorage: any;
   private interval: any;
 
+  private subscribers: ((tx: Tx, receipt: any) => void)[] = [];
+
   constructor(
     private web3service: Web3Service,
     private eventsService: EventsService
@@ -73,9 +77,23 @@ export class TxService {
             );
             tx.confirmed = true;
             this.saveTxs();
+
+            this.subscribers.forEach(cb => cb(tx, receipt));
           }
         });
       }
+    });
+  }
+
+  public subscribe(cb: (tx: Tx, receipt: any) => void): (tx: Tx, receipt: any) => void {
+    if (this.subscribers.find(c => c === cb) === undefined) {
+      this.subscribers.push(cb);
+    }
+     return cb;
+  }
+  public unsubscribe(cb) {
+    this.subscribers = this.subscribers.filter((el) => {
+      return el !== cb;
     });
   }
 
@@ -154,6 +172,44 @@ export class TxService {
 
     this.tx_memory.push(new Tx(tx, cosigner, false, Type.claim, data));
     this.saveTxs();
+  }
+
+  public registerPayTx(tx: string, loan: Loan, amount: number) {
+    const data = {
+      engine: loan.engine,
+      id: loan.id,
+      amount: amount
+    };
+     this.tx_memory.push(new Tx(tx, loan.engine, false, Type.pay, data));
+    this.saveTxs();
+  }
+   public getLastPendingPay(loan: Loan): Tx {
+    return this.tx_memory
+      .filter(tx => !tx.confirmed && tx.type === Type.pay && tx.to === loan.engine)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
+      .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+  }
+   public registerCancelTx(tx: string, loan: Loan) {
+    const data = {
+      engine: loan.engine,
+      id: loan.id
+    };
+     this.tx_memory.push(new Tx(tx, loan.engine, false, Type.cancel, data));
+    this.saveTxs();
+  }
+   public getCancelTx(loan: Loan): Tx {
+    return this.tx_memory
+      .filter(tx => !tx.confirmed && tx.type === Type.cancel)
+      .sort((tx1, tx2) => tx2.timestamp - tx2.timestamp)
+      .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+  }
+   public registerRequestTx(tx: string) {
+    this.tx_memory.push(new Tx(tx, undefined, false, Type.request, {}));
+    this.saveTxs();
+  }
+   public getPendingRequest(): Tx {
+    return this.tx_memory
+      .find(tx => !tx.confirmed && tx.type === Type.request);
   }
 
   public getLastPendingClaim(cosigner: string, loan: Loan) {

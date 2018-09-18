@@ -30,7 +30,6 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { LoanCardComponent } from './loan-card/loan-card.component';
-import { DialogPayComponent } from './dialog-pay/dialog-pay.component';
 
 @NgModule({
   declarations: [
@@ -57,14 +56,13 @@ import { DialogPayComponent } from './dialog-pay/dialog-pay.component';
     SocialContainerComponent,
     ClaimButtonComponent,
     LoanCardComponent,
-    DialogPayComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     HttpModule,
     MaterialModule,
-    BlockiesModule,
+    BlockiesModule
   ],
   exports: [
     LendButtonComponent,

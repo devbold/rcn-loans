@@ -6,10 +6,11 @@ import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
-import { Utils } from '../utils/utils';
+import { Utils, promisify } from '../utils/utils';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import BigNumber from 'bignumber.js';
-import { promisify } from './../utils/utils';
+import { AssetItem } from '../models/asset.model';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare let require: any;
 
@@ -17,6 +18,7 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
+const pawnAbi = require('../contracts/PawnManager.json');
 
 @Injectable()
 export class ContractsService {

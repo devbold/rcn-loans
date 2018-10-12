@@ -25,6 +25,12 @@ export class Utils {
     return hex.replace('0x000000000000000000000000', '0x');
   }
 
+  static toBytes32(hex: string): string {
+    const raw = hex.replace('0x', '');
+    const result =  hex.replace('0x', '0x' + '0'.repeat(64 - raw.length));
+    return result;
+  }
+
   static shortAddress(address: string): string {
     return address.substr(0, 4) + '...' + address.substr(-4);
   }
@@ -93,4 +99,13 @@ export class Utils {
 
     return value;
   }
+}
+
+export function promisify(func: any, args: any): Promise<any> {
+  return new Promise((res, rej) => {
+    func(...args, (err: any, data: any) => {
+      if (err) { return rej(err); }
+      return res(data);
+    });
+  });
 }

@@ -16,10 +16,14 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
 html {height: 0;}
 body{
   position: relative;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.42857143;
   font-family: 'Raleway', sans-serif;
-  background-color: $tertiary;
   color: $secondary;
+  background-color: $tertiary;
 }
+p{ margin-block-start: 0em; margin-block-end: 0em; }
 
 //TABS
 .mat-tab-label-container{
@@ -123,6 +127,7 @@ ngx-spinner .black-overlay.ng-star-inserted {
   >tbody{
     >tr{
       >td {
+        text-align: left;
         border: 0px;
         @extend %propiety-subtitle;
       }
@@ -190,7 +195,6 @@ mat-sidenav-container.mat-drawer-container {
 }
 .mat-drawer-opened{
   &.mat-drawer-container {
-    // position: absolute;
     position: fixed;
     overflow: hidden;
   }
@@ -240,6 +244,9 @@ mat-sidenav-container.mat-drawer-container {
 }
   //Menu
 .mat-menu-panel {
+  margin-top: 70px;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px !important;
   background-color: $gray7;
   .mat-menu-content {
     padding-top: 2px;
@@ -256,9 +263,9 @@ mat-sidenav-container.mat-drawer-container {
 }
   // Snackbar
 snack-bar-container.mat-snack-bar-container{
+  margin: 15px;
   color: $secondary;
-  button{&.mat-simple-snackbar-action{color: $primary;}
-  }
+  button{ &.mat-button{ color: $primary; text-transform: uppercase } }
 }
 
   //Forms
@@ -324,6 +331,7 @@ mat-form-field{
 
 // Header
 .nav-toggle{
+  cursor: pointer;
   border-radius: 0;
   padding: 0;
   margin-right: 35px;
@@ -502,7 +510,8 @@ footer {
       width: 24%;
       text-align: center;
       display: inline-block;
-      svg{font-size: 1.5em; color: $gray6; @include transition();}
+      svg,
+      .fas{font-size: 1.4em; color: $gray6; @include transition();}
       .nav-toggle {
         padding: 0;
         margin-right: 0;
@@ -525,7 +534,8 @@ footer {
         @extend %absolute-center;
       }
       &.active{
-        svg{color: $secondary;}
+        svg,
+        .fas{color: $secondary;}
         .available-loans {
           opacity: 1;
           @include transition-delay(1s);
@@ -569,46 +579,38 @@ footer {
     min-height: 0px;
     background-color: #121212;
     padding: 15px 30px;
-  }
-  .nav-mobile{
-    display: none;
-  }
-  a{
-    color: #fff;
-    @include transition();
-    &:hover{
-      color: $primary;
+    .icon{
+      margin-top: 0;
+      line-height: 1.9;
+      cursor: pointer;
+      padding-right: 15px;
+      display: inline-block;
+      &.version{
+        margin-right: 15px;    
+      }
     }
-  }
-  .left,
-  .center,
-  .right{
-    text-align: center;
-  }
-  .left{
-    text-align: left;
-  }
-  .center{
-    text-align: center;
-  }
-  .right{
-    text-align: right;
-  } 
-  .txt{
-    line-height: 1.9;
-  }
-  .button-group{
-    line-height: 1.9;
-    text-align: right;
-  }
-  .icon{
-    margin-top: 0;
-    line-height: 1.9;
-    cursor: pointer;
-    padding-right: 15px;
-    display: inline-block;
-    &.version{
-      margin-left: 15px;    
+    .nav-mobile{
+      display: none;
+    }
+    a{
+      color: #fff;
+      @include transition();
+      &:hover{
+        color: $primary;
+      }
+    }
+    .left{
+      text-align: left;
+    }
+    .center{
+      text-align: center;
+    }
+    .right{
+      text-align: right;
+    } 
+    .txt{
+      line-height: 1.9;
     }
   }
 }
+

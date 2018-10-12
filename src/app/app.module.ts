@@ -46,6 +46,7 @@ import { AddressComponent } from './views/address/address.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -54,6 +55,7 @@ import { DialogClientAccountComponent } from './dialogs/dialog-client-account/di
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { environment } from '../environments/environment';
+import { EventsService } from './services/events.service';
 
 Raven
   .config(environment.sentry, {
@@ -81,7 +83,7 @@ export class RavenErrorHandler implements ErrorHandler {
     AddressComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,6 +106,7 @@ export class RavenErrorHandler implements ErrorHandler {
     DialogLoanTransferComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent
   ],
   providers: [
     ContractsService,
@@ -118,6 +121,7 @@ export class RavenErrorHandler implements ErrorHandler {
     TitleService,
     AvailableLoansService,
     CountriesService,
+    EventsService,
   ],
   bootstrap: [AppComponent]
 })

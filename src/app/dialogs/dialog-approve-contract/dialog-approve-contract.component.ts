@@ -6,6 +6,8 @@ import { ContractsService } from '../../services/contracts.service';
 import { EventsService, Category } from '../../services/events.service';
 import { environment } from '../../../environments/environment';
 
+export enum ApproveTarget { Basalt, LoanManager }
+
 @Component({
   selector: 'app-dialog-approve-contract',
   templateUrl: './dialog-approve-contract.component.html',
@@ -13,8 +15,12 @@ import { environment } from '../../../environments/environment';
 })
 export class DialogApproveContractComponent implements OnInit {
   autoClose: boolean;
+  displayOnly: ApproveTarget;
   lender: string;
-  isApproved: boolean;
+
+  approved = [];
+  basaltApproved: boolean;
+  loanManagerApproved: boolean;
 
   constructor(
     private web3Service: Web3Service,
@@ -29,19 +35,20 @@ export class DialogApproveContractComponent implements OnInit {
       this.lender = resolve;
     });
   }
-  loadApproved(): Promise<any> {
-    return this.contracts.isEngineApproved().then((approved) => {
-      this.isApproved = approved;
-    });
+  async loadApproved(): Promise<any> {
+    const pbasalt = this.contracts.isBasaltApproved();
+    const pmanager = this.contracts.isLoanManagerApproved();
+    this.approved[ApproveTarget.Basalt] = await pbasalt;
+    this.approved[ApproveTarget.LoanManager] = await pmanager;
   }
-  get isEnabled(): boolean {
-    return this.isApproved !== undefined;
+  display(target: ApproveTarget): boolean {
+    return this.displayOnly === undefined || target === this.displayOnly;
   }
-  clickCheck() {
+  clickCheck(target: ApproveTarget) {
     let action;
     let actionCode;
 
-    if (this.isApproved) {
+    if (this.approved[target]) {
       actionCode = 'disapprove';
       action = this.contracts.disapproveEngine();
     } else {

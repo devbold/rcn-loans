@@ -21,9 +21,9 @@
       <div class="col-sm-12 col-md-6">
         <div class="margintop20 d-none d-md-none"></div>
         <div class="title main-h1 marginbottom20">Authorize</div>
-        <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Diaspore Engine contract to operate RCN on your behalf
+        <mat-checkbox [disabled]="loanManagerApproved === undefined" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Diaspore Engine contract to operate RCN on your behalf
         <br/><br/>
-        <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Basalt Engine contract to operate RCN on your behalf
+        <mat-checkbox [disabled]="basaltApproved === undefined" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Basalt Engine contract to operate RCN on your behalf
       </div>
     </div>
   </div>

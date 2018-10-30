@@ -34,6 +34,9 @@ export class IconAvatarComponent implements OnInit {
         this.class = 'indebt';
         this.icon = 'error_outline';
         break;
+      case Status.Expired:
+        this.class = 'expired';
+        this.icon = 'alarm';
     }
   }
 }

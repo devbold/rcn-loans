@@ -28,6 +28,9 @@ export class AvatarTitleComponent implements OnInit {
       case Status.Indebt:
         this.status = 'In debt';
         break;
+      case Status.Expired:
+        this.status = 'Expired';
+        break;
     }
   }
 }

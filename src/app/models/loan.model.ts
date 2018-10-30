@@ -2,7 +2,7 @@
 import { Utils } from './../utils/utils';
 import { Currency } from '../utils/currencies';
 
-export enum Status { Request, Ongoing, Paid, Destroyed, Indebt }
+export enum Status { Request, Ongoing, Paid, Destroyed, Indebt, Expired }
 
 function timestamp(): number {
     return (new Date().getTime() / 1000);
@@ -60,7 +60,7 @@ export class Loan {
     let pending;
     let deltaTime;
     const endNonPunitory = Math.min(timestamp(), this.dueTimestamp);
-    
+
     if (endNonPunitory > this.interestTimestamp) {
       deltaTime = endNonPunitory - this.interestTimestamp;
       if (this.rawPaid < this.rawAmount) {

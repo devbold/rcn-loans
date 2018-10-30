@@ -23,7 +23,8 @@ export class LoanUtils {
           parseInt(loanBytes[11], 16),
           parseInt(loanBytes[15], 16),
           Utils.formatAddress(loanBytes[0]),
-          Utils.formatAddress(loanBytes[3])
+          Utils.formatAddress(loanBytes[3]),
+          parseInt(loanBytes[17], 16)
         );
     }
 }

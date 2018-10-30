@@ -4,7 +4,6 @@ import { Utils } from './utils';
 export class LoanUtils {
     static loanFromBytes(engine: string, id: number, loanBytes: any): Loan {
         console.log('This is loanBytes: ');
-        console.log(loanBytes);
         return new Loan(
           engine,
           id,

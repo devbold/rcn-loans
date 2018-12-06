@@ -261,11 +261,11 @@ export class CreateLoanComponent implements OnInit {
   }
   expectedReturn() {
     const interest = this.annualInterest.value / 100;
-    const returnInterest = ( interest * this.requestValue.value ) + this.requestValue.value; // Calculate the return amount
+    const returnInterest = (interest * this.requestValue.value) + this.requestValue.value; // Calculate the return amount
     this.returnValue = Utils.formatAmount(returnInterest);
   }
   expectedDuration() {
-    const now = Math.round( (new Date() ).getTime() / 1000);
+    const now = Math.round((new Date()).getTime() / 1000);
     this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
     this.fullDuration.value = this.fullDuration.value - now;
     this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan

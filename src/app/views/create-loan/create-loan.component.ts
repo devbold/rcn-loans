@@ -25,7 +25,7 @@ export class CreateLoanComponent implements OnInit {
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
-  tomorrowDate: Date = new Date( this.tomorrow.setDate( this.now.getDate() + 1) );
+  tomorrowDate: Date = new Date(this.tomorrow.setDate(this.now.getDate() + 1));
 
   // Form Variables
   isOptional$ = true;
@@ -194,26 +194,28 @@ export class CreateLoanComponent implements OnInit {
   switchIdentityIcon(iconCase) {
     this.iconsSelection = [];
     for (const icon in iconCase) {
-      switch (iconCase[icon]) {
-        case 'phoneSlide':
-          this.iconsSelection.push( { 'class': 'fas fa-phone', 'tooltip': 'Phone' } );
-          break;
-        case 'idSlide':
-          this.iconsSelection.push( { 'class': 'fas fa-id-badge', 'tooltip': 'ID Document' } );
-          break;
-        case 'sactionSlide':
-          this.iconsSelection.push( { 'class': 'fas fa-address-card', 'tooltip': 'Saction Screen' } );
-          break;
-        case 'payrollSlide':
-          this.iconsSelection.push( { 'class': 'fas fa-receipt', 'tooltip': 'Payroll' } );
-          break;
-        case 'facebookSlide':
-          this.iconsSelection.push( { 'class': 'fab fa-facebook-f', 'tooltip': 'Facebook' } );
-          break;
-        case 'twitterSlide':
-          this.iconsSelection.push( { 'class': 'fab fa-twitter', 'tooltip': 'Twitter' } );
-          break;
-        default:
+      if (icon) {
+        switch (iconCase[icon]) {
+          case 'phoneSlide':
+            this.iconsSelection.push({ 'class': 'fas fa-phone', 'tooltip': 'Phone' });
+            break;
+          case 'idSlide':
+            this.iconsSelection.push({ 'class': 'fas fa-id-badge', 'tooltip': 'ID Document' });
+            break;
+          case 'sactionSlide':
+            this.iconsSelection.push({ 'class': 'fas fa-address-card', 'tooltip': 'Saction Screen' });
+            break;
+          case 'payrollSlide':
+            this.iconsSelection.push({ 'class': 'fas fa-receipt', 'tooltip': 'Payroll' });
+            break;
+          case 'facebookSlide':
+            this.iconsSelection.push({ 'class': 'fab fa-facebook-f', 'tooltip': 'Facebook' });
+            break;
+          case 'twitterSlide':
+            this.iconsSelection.push({ 'class': 'fab fa-twitter', 'tooltip': 'Twitter' });
+            break;
+          default:
+        }
       }
     }
   }
@@ -282,7 +284,7 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onSelectionChange() {
-    switch(this.stepper.selectedIndex) {
+    switch (this.stepper.selectedIndex) {
       case 0:
         if (this.formGroup1.valid) { // Form 1 is completed
           this.progress = 60;

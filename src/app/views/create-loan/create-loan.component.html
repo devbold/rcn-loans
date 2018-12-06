@@ -22,7 +22,7 @@
     <div class="col-xs-12 col-lg-6">
       <mat-vertical-stepper (animationDone)="onSelectionChange()" linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
+        <mat-step [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 

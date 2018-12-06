@@ -40,6 +40,7 @@ export class CreateLoanComponent implements OnInit {
   requestValue: any;
   requestedCurrency: any;
   returnValue: any = 0;
+  fullDurationContract: any;
 
   formGroup4: FormGroup;
   expirationRequestDate: FormControl;
@@ -120,28 +121,51 @@ export class CreateLoanComponent implements OnInit {
 
   onSubmitStep1(form: NgForm) {
     if (this.formGroup1.valid) {
-      this.fullDuration = form.value.duration.fullDuration;
+      this.fullDurationContract = form.value.duration.fullDuration;
+      console.log('You are Submit fullDuration ' + this.fullDuration);
 
-      const duration = form.value.duration.fullDuration;
-      const duesIn = new Date(duration);
-      const cancelableAt = new Date(duration);
-      cancelableAt.setDate(new Date() + form.value.duration.payableAtDate);
+      this.requestedCurrency = form.value.conversionGraphic.requestedCurrency;
+      console.log('You are Submit requestedCurrency ' + this.requestedCurrency);
 
+      this.requestValue = form.value.conversionGraphic.requestValue;
+      console.log('You are Submit requestValue ' + this.requestValue);
+
+      this.annualInterest = form.value.interest.annualInterest;
+      console.log('You are Submit annualInterest ' + this.annualInterest);
+
+      this.annualPunitory = form.value.interest.annualPunitory;
+      console.log('You are Submit annualPunitory ' + this.annualPunitory);
+
+    } else {
+      this.requiredInvalid$ = true;
+    }
+  }
+
+  onCreateLoan() {
+    if (this.formGroup4.valid) {
+      console.log('VALID FORM');
+
+      const duesIn = new Date(this.fullDurationContract);
+      const cancelableAt = new Date(this.fullDurationContract);
       const expirationRequest = new Date();
       expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE
 
       this.contractsService.requestLoan(
-        this.selectedOracle,
-        Utils.asciiToHex(form.value.conversionGraphic.requestedCurrency),
-        form.value.conversionGraphic.requestValue,
-        Utils.formatInterest(form.value.interest.annualInterest),
-        Utils.formatInterest(form.value.interest.annualPunitory),
-        duesIn.getTime() / 1000,
-        cancelableAt.getTime() / 1000,
-        expirationRequest.getTime() / 1000,
-      '');
+        this.selectedOracle, // This is the oracle
+        Utils.asciiToHex(this.requestedCurrency), // This is the currency
+        this.requestValue,  // This is the amount
+        Utils.formatInterest(this.annualInterest),  // This is the interest
+        Utils.formatInterest(this.annualPunitory),  // This is the punitory
+        duesIn.getTime() / 1000,  // This is the duesIn
+        cancelableAt.getTime() / 1000,  // This is the cancelableAt
+        expirationRequest.getTime() / 1000,  // This is the expirationRequest
+        '' // This is the metaData
+        );
+
+      this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', ''); // Notify about the transaction
+
     } else {
-      this.requiredInvalid$ = true;
+      console.log('INVALID FORM');
     }
   }
 
@@ -186,11 +210,6 @@ export class CreateLoanComponent implements OnInit {
     this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
     this.fullDuration.value = this.fullDuration.value - now;
     this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
-  }
-
-  onCreateLoan() {
-    // TODO Use when create loan service is finnished
-    this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
   }
 
   openSnackBar(message: string, action: string) {

@@ -30,7 +30,7 @@ export class LoanCardComponent implements OnInit {
       this.durationValue = this.loan.verboseDuration;
       this.canLend = true;
     } else {
-      this.leftLabel = 'Paid';
+      this.leftLabel = 'Paiddddd';
       this.leftValue = this.formatAmount(this.loan.paid);
       this.rightLabel = 'Pending';
       this.rightValue = this.formatAmount(this.loan.pendingAmount);

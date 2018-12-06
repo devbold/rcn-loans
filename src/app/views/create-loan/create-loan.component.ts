@@ -40,7 +40,12 @@ export class CreateLoanComponent implements OnInit {
   requestValue: any;
   requestedCurrency: any;
   returnValue: any = 0;
-  fullDurationContract: any;
+
+  fullDurationContract: Date;
+  requestValueContract: number;
+  requestedCurrencyContract: number;
+  annualInterestContract: number;
+  annualPunitoryContract: number;
 
   formGroup4: FormGroup;
   expirationRequestDate: FormControl;
@@ -54,17 +59,17 @@ export class CreateLoanComponent implements OnInit {
   // Card Variables
   account: string;
   loan: Loan = new Loan(
-    'engine', // engine
+    '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf', // engine
     0, // id
     this.selectedOracle, // oracle
     Status.Request, // statusFlag
-    this.account, // borrower
-    'this.account', // creator
+    '0xe4d3ba99ffdae47c003f1756c01d8e7ee8fef7c9', // borrower
+    '0x0679cde060990fb409cb19b4434714c1e5f2ae6e', // creator
     1, // rawAmount
     this.fullDuration, // duration
     this.annualInterest, // rawAnnualInterest
     this.annualPunitory, // rawAnnualPunitoryInterest
-    this.requestedCurrency, // currencyRaw
+    this.requestedCurrency = '', // currencyRaw
     this.returnValue, // rawPaid
     0, // cumulatedInterest
     0, // cumulatedPunnitoryInterest
@@ -121,20 +126,20 @@ export class CreateLoanComponent implements OnInit {
 
   onSubmitStep1(form: NgForm) {
     if (this.formGroup1.valid) {
-      this.fullDurationContract = form.value.duration.fullDuration;
-      console.log('You are Submit fullDuration ' + this.fullDuration);
+      this.fullDurationContract = new Date();
+      console.info('You are Submit fullDuration ' + this.fullDurationContract);
 
-      this.requestedCurrency = form.value.conversionGraphic.requestedCurrency;
-      console.log('You are Submit requestedCurrency ' + this.requestedCurrency);
+      this.requestedCurrencyContract = form.value.conversionGraphic.requestedCurrency;
+      console.info('You are Submit requestedCurrency ' + this.requestedCurrencyContract);
 
-      this.requestValue = form.value.conversionGraphic.requestValue;
-      console.log('You are Submit requestValue ' + this.requestValue);
+      this.requestValueContract = form.value.conversionGraphic.requestValue;
+      console.info('You are Submit requestValue ' + this.requestValueContract);
 
-      this.annualInterest = form.value.interest.annualInterest;
-      console.log('You are Submit annualInterest ' + this.annualInterest);
+      this.annualInterestContract = form.value.interest.annualInterest;
+      console.info('You are Submit annualInterest ' + this.annualInterestContract);
 
-      this.annualPunitory = form.value.interest.annualPunitory;
-      console.log('You are Submit annualPunitory ' + this.annualPunitory);
+      this.annualPunitoryContract = form.value.interest.annualPunitory;
+      console.info('You are Submit annualPunitory ' + this.annualPunitoryContract);
 
     } else {
       this.requiredInvalid$ = true;
@@ -143,7 +148,7 @@ export class CreateLoanComponent implements OnInit {
 
   onCreateLoan() {
     if (this.formGroup4.valid) {
-      console.log('VALID FORM');
+      console.info('VALID FORM');
 
       const duesIn = new Date(this.fullDurationContract);
       const cancelableAt = new Date(this.fullDurationContract);
@@ -152,20 +157,22 @@ export class CreateLoanComponent implements OnInit {
 
       this.contractsService.requestLoan(
         this.selectedOracle, // This is the oracle
-        Utils.asciiToHex(this.requestedCurrency), // This is the currency
-        this.requestValue,  // This is the amount
-        Utils.formatInterest(this.annualInterest),  // This is the interest
-        Utils.formatInterest(this.annualPunitory),  // This is the punitory
-        duesIn.getTime() / 1000,  // This is the duesIn
-        cancelableAt.getTime() / 1000,  // This is the cancelableAt
-        expirationRequest.getTime() / 1000,  // This is the expirationRequest
+        Utils.asciiToHex(this.requestedCurrencyContract), // This is the currency
+        this.requestValueContract, // This is the amount
+        Utils.formatInterest(this.annualInterestContract), // This is the interest
+        Utils.formatInterest(this.annualPunitoryContract), // This is the punitory
+        this.fullDuration,
+        this.fullDuration,
+        // duesIn.getTime() / 1000, // This is the duesIn
+        // cancelableAt.getTime() / 1000, // This is the cancelableAt
+        expirationRequest.getTime() / 1000, // This is the expirationRequest
         '' // This is the metaData
-        );
+      );
 
       this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', ''); // Notify about the transaction
 
     } else {
-      console.log('INVALID FORM');
+      console.info('INVALID FORM');
     }
   }
 
@@ -176,7 +183,7 @@ export class CreateLoanComponent implements OnInit {
   onCurrencyChange(requestedCurrency) {
     switch (requestedCurrency.value) {
       case 'rcn':
-        this.selectedOracle = undefined;
+        this.selectedOracle = Utils.address0x;
         break;
       case 'mana':
         if (environment.production) {
@@ -242,6 +249,7 @@ export class CreateLoanComponent implements OnInit {
     this.web3Service.getAccount().then((account) => {
       this.account = Utils.shortAddress(account); // Get account address
     });
+    console.info(Status.Request);
 
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables

@@ -196,7 +196,7 @@
           <div class="properties-block">
             <div class="title">{{ 'Lend' }}</div>
             <div class="currency">
-              {{ requestedCurrency.value == undefined || requestedCurrency.value == null ? 'Currency' : requestedCurrency.value }}
+              {{ requestedCurrency.value === undefined || requestedCurrency.value === null ? 'Currency' : requestedCurrency.value }}
             </div>
             <div class="title">{{ 'Return' }}</div>
           </div>
@@ -207,6 +207,7 @@
           </div>
         </div>
       </div>
+      <app-loan-card [loan]="loan"></app-loan-card>
 
     </div>
   </div>

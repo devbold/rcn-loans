@@ -135,7 +135,8 @@ export class ContractsService {
     }) as Promise<string>;
   }
 
-  async requestLoan(oracle: string,
+  async requestLoan(
+    oracle: string,
     currency: string,
     amount: number,
     interest: number,
@@ -149,7 +150,10 @@ export class ContractsService {
     amount = amount * 10 ** Currency.getDecimals('RCN');
 
     return new Promise((resolve, reject) => {
-      this._rcnEngine.createLoan(
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).createLoan(
         oracle,
         account,
         currency,

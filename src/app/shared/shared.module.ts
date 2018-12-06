@@ -1,6 +1,9 @@
 // Angular Core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlockiesModule } from 'angular-blockies';
 // App Modules
 import { MaterialModule } from '../material/material.module';
@@ -51,6 +54,10 @@ import { EventsService } from './../services/events.service';
 @NgModule({
   imports: [
     CommonModule,
+    BrowserModule,
+    HttpModule,
+    FormsModule,
+    ReactiveFormsModule,
     MaterialModule,
     BlockiesModule
   ],
@@ -104,8 +111,10 @@ import { EventsService } from './../services/events.service';
     EventsService
   ],
   exports: [
-    LoanCardComponent,
+    FormsModule,
+    ReactiveFormsModule,
 
+    LoanCardComponent,
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,

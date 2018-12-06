@@ -10,6 +10,7 @@ import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
 import { Utils } from '../utils/utils';
+import { Currency } from '../utils/currencies';
 import { promisify } from './../utils/utils';
 
 declare let require: any;
@@ -113,7 +114,6 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
-
   async disapproveEngine(): Promise<string> {
     const account = await this.web3.getAccount();
     const txService = this.txService;
@@ -134,6 +134,44 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
+
+
+  async requestLoan(oracle: string,
+    currency: string,
+    amount: number,
+    interest: number,
+    punitory: number,
+    duesIn: number,
+    cancelableAt: number,
+    expirationRequest: number,
+    metadata: string): Promise<BigNumber> {
+
+    const account = await this.web3.getAccount();
+    amount = amount * 10 ** Currency.getDecimals('RCN');
+
+    return new Promise((resolve, reject) => {
+      this._rcnEngine.createLoan(
+        oracle,
+        account,
+        currency,
+        amount,
+        interest,
+        punitory,
+        duesIn,
+        cancelableAt,
+        expirationRequest,
+        metadata,
+        { from: account }, function (err, result) {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }) as Promise<BigNumber>;
+  }
+
   async estimateEthRequiredAmount(loan: Loan): Promise<BigNumber> {
     let oracleData = await this.getOracleData(loan);
     if (Utils.isEmpty(oracleData)) {
@@ -195,6 +233,7 @@ export class ContractsService {
     console.info('Estimated required rcn is', required);
     return required;
   }
+
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;

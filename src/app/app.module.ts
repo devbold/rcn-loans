@@ -6,6 +6,7 @@ import { environment } from '../environments/environment';
 // App Modules
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { CoreModule } from './core/core.module';
+import { CreateLoanModule } from './views/create-loan/create-loan.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 import { ActiveLoansModule } from './views/active-loans/active-loans.module';
 import { AddressModule } from './views/address/address.module';
@@ -31,6 +32,7 @@ export class RavenErrorHandler implements ErrorHandler {
     AppRoutingModule,
 
     CoreModule,
+    CreateLoanModule,
     RequestedLoanModule,
     ActiveLoansModule,
     AddressModule,

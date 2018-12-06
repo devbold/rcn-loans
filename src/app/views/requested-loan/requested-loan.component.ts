@@ -12,6 +12,7 @@ import { AvailableLoansService } from '../../services/available-loans.service';
   styleUrls: ['./requested-loan.component.scss']
 })
 export class RequestedLoanComponent implements OnInit {
+
   loading: boolean;
   available: any;
   loans = [];
@@ -43,8 +44,6 @@ export class RequestedLoanComponent implements OnInit {
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.loadLoans();
-
-    // Available Loans service
-    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+    this.availableLoansService.currentAvailable.subscribe(available => this.available = available); // Available Loans service
   }
 }

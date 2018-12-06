@@ -41,18 +41,6 @@ export class CreateLoanComponent implements OnInit {
   requestedCurrency: any;
   returnValue: any = 0;
 
-  formGroup2: FormGroup;
-  phoneSlide: any;
-  idSlide: any;
-  sactionSlide: any;
-  payrollSlide: any;
-  facebookSlide: any;
-  twitterSlide: any;
-  slideSelection: any;
-  iconsSelection: any;
-
-  formGroup3: FormGroup;
-
   formGroup4: FormGroup;
   expirationRequestDate: FormControl;
 
@@ -104,13 +92,6 @@ export class CreateLoanComponent implements OnInit {
     this.requestValue = new FormControl('0'); // formGroup1
     this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
 
-    this.phoneSlide = new FormControl(true); // formGroup2
-    this.idSlide = new FormControl(true); // formGroup2
-    this.sactionSlide = new FormControl(); // formGroup2
-    this.payrollSlide = new FormControl(); // formGroup2
-    this.facebookSlide = new FormControl(true); // formGroup2
-    this.twitterSlide = new FormControl(); // formGroup2
-
     this.expirationRequestDate = new FormControl('', Validators.required); // formGroup4
   }
 
@@ -129,17 +110,6 @@ export class CreateLoanComponent implements OnInit {
         requestedCurrency: this.requestedCurrency
       })
     });
-
-    this.formGroup2 = new FormGroup({
-      phoneSlide: this.phoneSlide,
-      idSlide: this.idSlide,
-      sactionSlide: this.sactionSlide,
-      payrollSlide: this.payrollSlide,
-      facebookSlide: this.facebookSlide,
-      twitterSlide: this.twitterSlide
-    });
-
-    this.formGroup3 = new FormGroup({});
 
     this.formGroup4 = new FormGroup({
       expiration: new FormGroup({
@@ -175,61 +145,8 @@ export class CreateLoanComponent implements OnInit {
     }
   }
 
-  onSubmitStep2(form: NgForm) {
-    const step2Form = form.value;
-    this.getSlideSelection(step2Form);
-    this.switchIdentityIcon(this.slideSelection);
-    if (this.skipped === true) { this.slideSelection = []; }
-  }
-
-  getSlideSelection(step2Form) {
-    this.slideSelection = [];
-    for (const property in step2Form) {
-      if (step2Form[property] === true) {
-        this.slideSelection.push(property);
-      }
-    }
-  }
-
-  switchIdentityIcon(iconCase) {
-    this.iconsSelection = [];
-    for (const icon in iconCase) {
-      if (icon) {
-        switch (iconCase[icon]) {
-          case 'phoneSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-phone', 'tooltip': 'Phone' });
-            break;
-          case 'idSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-id-badge', 'tooltip': 'ID Document' });
-            break;
-          case 'sactionSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-address-card', 'tooltip': 'Saction Screen' });
-            break;
-          case 'payrollSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-receipt', 'tooltip': 'Payroll' });
-            break;
-          case 'facebookSlide':
-            this.iconsSelection.push({ 'class': 'fab fa-facebook-f', 'tooltip': 'Facebook' });
-            break;
-          case 'twitterSlide':
-            this.iconsSelection.push({ 'class': 'fab fa-twitter', 'tooltip': 'Twitter' });
-            break;
-          default:
-        }
-      }
-    }
-  }
-
   moveTo(index: number) {
     this.stepper.selectedIndex = index;
-  }
-
-  onSkip() {
-    this.moveTo(3);
-    this.skipped = true;
-  }
-  onNotSkipped() {
-    this.skipped = false;
   }
 
   onCurrencyChange(requestedCurrency) {
@@ -295,20 +212,6 @@ export class CreateLoanComponent implements OnInit {
       case 1:
         if (this.formGroup1.valid) { // Form 1 is completed
           this.progress = 60;
-        }
-        break;
-      case 2:
-        if (this.formGroup1.valid && this.slideSelection.length > 1) { // Form 1 is completed and Selected at least 1 bloom identity field
-          this.progress = 90;
-        }
-        break;
-      case 3:
-        if (this.formGroup1.valid && this.slideSelection.length > 1) { // Form 1 is completed and Selected at least 1 bloom identity field
-          this.progress = 90;
-        } else if (this.formGroup1.valid && this.slideSelection.length < 1) { // Form 1 is completed
-          this.progress = 60;
-        } else {
-          this.progress = 0;
         }
         break;
       default:

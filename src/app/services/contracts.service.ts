@@ -135,7 +135,6 @@ export class ContractsService {
     }) as Promise<string>;
   }
 
-
   async requestLoan(oracle: string,
     currency: string,
     amount: number,

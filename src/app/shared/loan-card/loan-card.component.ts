@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 

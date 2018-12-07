@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
   MatStepper,
@@ -18,14 +18,14 @@ import { Web3Service } from './../../services/web3.service';
   templateUrl: './create-loan.component.html',
   styleUrls: ['./create-loan.component.scss']
 })
-export class CreateLoanComponent implements OnInit {
+export class CreateLoanComponent implements OnInit, OnChanges {
   @ViewChild('stepper') stepper: MatStepper;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
-  tomorrowDate: Date = new Date(this.tomorrow.setDate(this.now.getDate() + 1));
+  tomorrowDate: any = new Date(this.tomorrow.setDate(this.now.getDate() + 1));
 
   // Form Variables
   isOptional$ = true;
@@ -57,29 +57,8 @@ export class CreateLoanComponent implements OnInit {
   skipped = false;
 
   // Card Variables
-  account: string;
-  loan: Loan = new Loan(
-    '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf', // engine
-    0, // id
-    this.selectedOracle, // oracle
-    Status.Request, // statusFlag
-    '0xe4d3ba99ffdae47c003f1756c01d8e7ee8fef7c9', // borrower
-    '0x0679cde060990fb409cb19b4434714c1e5f2ae6e', // creator
-    1, // rawAmount
-    this.fullDuration, // duration
-    this.annualInterest, // rawAnnualInterest
-    this.annualPunitory, // rawAnnualPunitoryInterest
-    this.requestedCurrency = '', // currencyRaw
-    this.returnValue, // rawPaid
-    0, // cumulatedInterest
-    0, // cumulatedPunnitoryInterest
-    this.fullDuration, // interestTimestamp
-    this.fullDuration, // dueTimestamp
-    0, // lenderBalance
-    0, // expirationRequest
-    '0x0', // owner
-    '0x0' // cosigner
-  );
+  account = '';
+  loan: Loan;
 
   // Progress bar
   progress: number;
@@ -88,12 +67,12 @@ export class CreateLoanComponent implements OnInit {
     private contractsService: ContractsService,
     private web3Service: Web3Service,
     public snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   createFormControls() { // Create form controls and define values
-    this.fullDuration = new FormControl(0, Validators.required); // formGroup1
+    this.fullDuration = new FormControl(undefined, Validators.required); // formGroup1
     this.payableAtDate = new FormControl('0', Validators.required); // formGroup1
-    this.annualInterest = new FormControl('40', Validators.required); // formGroup1
+    this.annualInterest = new FormControl((40), Validators.required); // formGroup1
     this.annualPunitory = new FormControl('60', Validators.required); // formGroup1
     this.requestValue = new FormControl('0'); // formGroup1
     this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
@@ -122,6 +101,53 @@ export class CreateLoanComponent implements OnInit {
         expirationRequestDate: this.expirationRequestDate
       })
     });
+
+    this.buildLoan();
+    this.formGroup1.valueChanges.subscribe(() => { this.buildLoan(); });
+    this.formGroup4.valueChanges.subscribe(() => { this.buildLoan(); });
+  }
+
+  buildDuration(duration: Date): number {
+    console.info('This is Duration ' + duration);
+    if (!duration) {
+      console.info('Something change is 0 ');
+      return new Date().getTime() / 1000;
+    }
+    console.info('Something change is ELSE ');
+    console.info(new Date().getTime() / 1000);
+    return Math.floor((duration.getTime() - new Date().getTime()) / 1000);
+  }
+
+  buildCurrency() {
+    if (this.requestedCurrency === '') {
+      return 'Currency';
+    }
+    return this.requestedCurrency;
+  }
+
+  buildLoan() {
+    this.loan = new Loan(
+      '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf', // engine
+      0, // id
+      this.selectedOracle, // oracle
+      Status.Request, // statusFlag
+      this.account, // borrower
+      this.account, // creator
+      this.requestValue.value * 10 ** 18, // rawAmount
+      this.buildDuration(this.fullDuration.value), // duration
+      311040000000000 / this.annualInterest.value, // rawAnnualInterest
+      311040000000000 / this.annualPunitory.value, // rawAnnualPunitoryInterest
+      this.requestedCurrency = '', // currencyRaw
+      0, // rawPaid
+      0, // cumulatedInterest
+      0, // cumulatedPunnitoryInterest
+      this.fullDuration, // interestTimestamp
+      0, // dueTimestamp
+      0, // lenderBalance
+      this.tomorrowDate, // expirationRequest
+      '0x0', // owner
+      '0x0' // cosigner
+    );
   }
 
   onSubmitStep1(form: NgForm) {
@@ -214,9 +240,9 @@ export class CreateLoanComponent implements OnInit {
   }
   expectedDuration() {
     const now = Math.round((new Date()).getTime() / 1000);
-    this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
-    this.fullDuration.value = this.fullDuration.value - now;
-    this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
+    // this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
+    // this.fullDuration.value = this.fullDuration.value - now;
+    // this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
   }
 
   openSnackBar(message: string, action: string) {
@@ -246,12 +272,18 @@ export class CreateLoanComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.web3Service.getAccount().then((account) => {
-      this.account = Utils.shortAddress(account); // Get account address
-    });
-    console.info(Status.Request);
-
+    this.web3Service.loginEvent.subscribe(() => this.loadLogin());
+    this.loadLogin();
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
+  }
+
+  async loadLogin() {
+    this.account = await this.web3Service.getAccount();
+    this.buildLoan();
+  }
+
+  ngOnChanges(): void {
+    console.info('Changed');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
@@ -7,7 +7,7 @@ import { Utils } from '../../utils/utils';
   templateUrl: './loan-card.component.html',
   styleUrls: ['./loan-card.component.scss']
 })
-export class LoanCardComponent implements OnInit {
+export class LoanCardComponent implements OnChanges {
   @Input() loan: Loan;
 
   leftLabel: string;
@@ -20,7 +20,7 @@ export class LoanCardComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges() {
     if (this.loan.status === Status.Request) {
       this.leftLabel = 'Lend';
       this.leftValue = this.formatAmount(this.loan.amount);
@@ -30,7 +30,7 @@ export class LoanCardComponent implements OnInit {
       this.durationValue = this.loan.verboseDuration;
       this.canLend = true;
     } else {
-      this.leftLabel = 'Paiddddd';
+      this.leftLabel = 'Paid';
       this.leftValue = this.formatAmount(this.loan.paid);
       this.rightLabel = 'Pending';
       this.rightValue = this.formatAmount(this.loan.pendingAmount);

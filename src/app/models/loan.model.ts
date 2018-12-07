@@ -136,8 +136,4 @@ export class Loan {
   get expectedReturn(): number {
     return ((this.amount * 100000 * this.duration) / this.rawAnnualInterest) + this.amount;
   }
-
-  get borrowerShort(): string {
-    return Utils.shortAddress(this.borrower);
-  }
 }

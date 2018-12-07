@@ -58,7 +58,7 @@ export class CreateLoanComponent implements OnInit {
 
   // Card Variables
   loan: Loan;
-  account = '';
+  account: string;
 
   // Progress bar
   progress: number;
@@ -150,25 +150,13 @@ export class CreateLoanComponent implements OnInit {
       '0x0', // owner
       '0x0' // cosigner
     );
+
+    this.returnValue = Utils.formatAmount(this.loan.expectedReturn);
   }
 
   onSubmitStep1(form: NgForm) {
     if (this.formGroup1.valid) {
-      this.fullDurationContract = new Date();
-      console.info('You are Submit fullDuration ' + this.fullDurationContract);
-
-      this.requestedCurrencyContract = form.value.conversionGraphic.requestedCurrency;
-      console.info('You are Submit requestedCurrency ' + this.requestedCurrencyContract);
-
-      this.requestValueContract = form.value.conversionGraphic.requestValue;
-      console.info('You are Submit requestValue ' + this.requestValueContract);
-
-      this.annualInterestContract = form.value.interest.annualInterest;
-      console.info('You are Submit annualInterest ' + this.annualInterestContract);
-
-      this.annualPunitoryContract = form.value.interest.annualPunitory;
-      console.info('You are Submit annualPunitory ' + this.annualPunitoryContract);
-
+      console.info(form + ' Is Valid');
     } else {
       this.requiredInvalid$ = true;
     }
@@ -236,22 +224,20 @@ export class CreateLoanComponent implements OnInit {
     if (this.requestValue.value > 1000000) { this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
   }
   expectedReturn() {
-    const interest = this.annualInterest.value / 100;
-    const returnInterest = (interest * this.requestValue.value) + this.requestValue.value; // Calculate the return amount
-    if (this.fullDuration === 60) {
-      this.returnValue = Utils.formatAmount(returnInterest);
-      console.info('Duration Undefined');
-    } else {
-      console.info('Touched duration');
-      const duration = Math.round((new Date(this.fullDuration.value).getTime() - new Date().getTime()) / 1000);
-      const rawAnnualInterest = Math.floor(311040000000000 / this.annualInterest.value);
-      const requestAmount = this.requestValue.value;
-      this.returnValue = Math.floor((requestAmount * 100000 * duration) / rawAnnualInterest) + requestAmount;
-      console.info(duration);
-      console.info(rawAnnualInterest);
-      console.info(requestAmount);
-      console.info(this.returnValue);
-    }
+    // if (this.fullDuration === 60) {
+    //   this.returnValue = Utils.formatAmount(returnInterest);
+    //   console.info('Duration Undefined');
+    // } else {
+    //   console.info('Touched duration');
+    //   const duration = Math.round((new Date(this.fullDuration.value).getTime() - new Date().getTime()) / 1000);
+    //   const rawAnnualInterest = Math.floor(311040000000000 / this.annualInterest.value);
+    //   const requestAmount = this.requestValue.value;
+    //   this.returnValue = Math.floor((requestAmount * 100000 * duration) / rawAnnualInterest) + requestAmount;
+    //   console.info(duration);
+    //   console.info(rawAnnualInterest);
+    //   console.info(requestAmount);
+    //   console.info(this.returnValue);
+    // }
   }
 
   openSnackBar(message: string, action: string) { // On metamask transaction requested
@@ -285,6 +271,7 @@ export class CreateLoanComponent implements OnInit {
     this.loadLogin();
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
+    console.info(this.loan);
   }
 
   async loadLogin() {

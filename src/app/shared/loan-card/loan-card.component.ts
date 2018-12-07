@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 export class LoanCardComponent implements OnChanges {
   @Input() loan: Loan;
 
+  borrower: string;
   leftLabel: string;
   leftValue: string;
   rightLabel: string;
@@ -21,6 +22,7 @@ export class LoanCardComponent implements OnChanges {
   constructor() { }
 
   ngOnChanges() {
+    this.borrower = this.loan.borrower ? Utils.shortAddress(this.loan.borrower) : '...';
     if (this.loan.status === Status.Request) {
       this.leftLabel = 'Lend';
       this.leftValue = this.formatAmount(this.loan.amount);

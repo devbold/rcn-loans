@@ -115,16 +115,16 @@ export class CreateLoanComponent implements OnInit {
   }
 
   buildCurrency() {
-    switch (this.selectedOracle) {
-      case 'asd':
-        return '0x0000000000000000000000000000000000000000';
-        break;
-      case 'MANA':
-        return '0x0000000000000000000000000000000000000000';
-        break;
-      default:
-        return '';
+    console.info(this.selectedOracle);
+    if (this.selectedOracle === undefined) {
+      console.info('No currency selected');
+      this.selectedOracle = Utils.address0x;
     }
+    return this.selectedOracle;
+  }
+
+  buildRawAmount() {
+    return this.requestValue.value;
   }
 
   buildLoan() {
@@ -135,7 +135,7 @@ export class CreateLoanComponent implements OnInit {
       Status.Request, // statusFlag
       this.account, // borrower
       this.account, // creator
-      this.requestValue.value * 10 ** 18, // rawAmount
+      this.buildRawAmount(), // rawAmount
       this.buildDuration(this.fullDuration.value), // duration
       311040000000000 / this.annualInterest.value, // rawAnnualInterest
       311040000000000 / this.annualPunitory.value, // rawAnnualPunitoryInterest
@@ -152,48 +152,6 @@ export class CreateLoanComponent implements OnInit {
     );
 
     this.returnValue = Utils.formatAmount(this.loan.expectedReturn);
-  }
-
-  onSubmitStep1(form: NgForm) {
-    if (this.formGroup1.valid) {
-      console.info(form + ' Is Valid');
-    } else {
-      this.requiredInvalid$ = true;
-    }
-  }
-
-  onCreateLoan() {
-    if (this.formGroup4.valid) {
-      console.info('VALID FORM');
-
-      const duesIn = new Date(this.fullDurationContract);
-      const cancelableAt = new Date(this.fullDurationContract);
-      const expirationRequest = new Date();
-      expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE
-
-      this.contractsService.requestLoan(
-        this.selectedOracle, // This is the oracle
-        Utils.asciiToHex(this.requestedCurrencyContract), // This is the currency
-        this.requestValueContract, // This is the amount
-        Utils.formatInterest(this.annualInterestContract), // This is the interest
-        Utils.formatInterest(this.annualPunitoryContract), // This is the punitory
-        this.fullDuration,
-        this.fullDuration,
-        // duesIn.getTime() / 1000, // This is the duesIn
-        // cancelableAt.getTime() / 1000, // This is the cancelableAt
-        expirationRequest.getTime() / 1000, // This is the expirationRequest
-        '' // This is the metaData
-      );
-
-      this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', ''); // Notify about the transaction
-
-    } else {
-      console.info('INVALID FORM');
-    }
-  }
-
-  moveTo(index: number) {
-    this.stepper.selectedIndex = index;
   }
 
   onCurrencyChange(requestedCurrency) {
@@ -219,25 +177,38 @@ export class CreateLoanComponent implements OnInit {
         this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
   }
-  onRequestedChange() {
-    if (this.requestValue.value < 0) { this.requestValue = new FormControl(0); } // Limit de min to 0
-    if (this.requestValue.value > 1000000) { this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
+
+  onSubmitStep1(form: NgForm) {
+    if (this.formGroup1.valid) {
+      console.info(form.value + ' Is Valid');
+    } else {
+      this.requiredInvalid$ = true;
+    }
   }
-  expectedReturn() {
-    // if (this.fullDuration === 60) {
-    //   this.returnValue = Utils.formatAmount(returnInterest);
-    //   console.info('Duration Undefined');
-    // } else {
-    //   console.info('Touched duration');
-    //   const duration = Math.round((new Date(this.fullDuration.value).getTime() - new Date().getTime()) / 1000);
-    //   const rawAnnualInterest = Math.floor(311040000000000 / this.annualInterest.value);
-    //   const requestAmount = this.requestValue.value;
-    //   this.returnValue = Math.floor((requestAmount * 100000 * duration) / rawAnnualInterest) + requestAmount;
-    //   console.info(duration);
-    //   console.info(rawAnnualInterest);
-    //   console.info(requestAmount);
-    //   console.info(this.returnValue);
-    // }
+
+  onCreateLoan() {
+    if (this.formGroup4.valid) {
+      console.info('VALID FORM');
+      const expirationRequest = new Date();
+      expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE
+
+      this.contractsService.requestLoan(
+        this.loan.oracle, // This is the oracle
+        this.loan.currencyRaw, // This is the currency
+        this.loan.rawAmount, // This is the amount
+        this.loan.rawAnnualInterest, // This is the interest
+        this.loan.rawAnnualPunitoryInterest, // This is the punitory
+        this.loan.dueTimestamp, // This is the duesIn
+        this.loan.dueTimestamp, // This is the cancelableAt
+        expirationRequest.getTime() / 1000, // This is the expirationRequest
+        '' // This is the metaData
+      );
+
+      this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', ''); // Notify about the transaction
+
+    } else {
+      console.info('INVALID FORM');
+    }
   }
 
   openSnackBar(message: string, action: string) { // On metamask transaction requested
@@ -245,6 +216,15 @@ export class CreateLoanComponent implements OnInit {
       duration: 4000,
       horizontalPosition: this.horizontalPosition
     });
+  }
+
+  moveTo(index: number) {
+    this.stepper.selectedIndex = index;
+  }
+
+  onRequestedChange() {
+    if (this.requestValue.value < 0) { this.requestValue = new FormControl(0); } // Limit de min to 0
+    if (this.requestValue.value > 1000000) { this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
   }
 
   onSelectionChange() {
@@ -271,7 +251,6 @@ export class CreateLoanComponent implements OnInit {
     this.loadLogin();
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
-    console.info(this.loan);
   }
 
   async loadLogin() {

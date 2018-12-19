@@ -30,6 +30,15 @@ export class TestWallet {
         to: waccounts[0],
         value: this.web3.toWei(amount)
       }]);
+      console.info(
+       'Funding test wallet',
+        'from',
+        saccounts[0],
+        'to',
+        waccounts[0],
+        'tx',
+        tx
+      );
       await waitForReceipt(this.web3, tx);
     } catch {
       if (r < 90) {
